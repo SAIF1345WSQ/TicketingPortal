@@ -1,0 +1,71 @@
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.header-left h2 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 28px;
+}
+
+.header-left p {
+    margin: 4px 0 0;
+    color: #64748b;
+}
+
+.header-right {
+    display: flex;
+    gap: 10px;
+}
+
+.header-right .btn {
+    min-width: 100px;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+.status-badge,
+.priority-badge {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 2px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.status-open {
+    background: #173e29;
+    color: #54d98b;
+}
+
+.status-closed {
+    background: #3a2020;
+    color: #ff7070;
+}
+
+.status-pending {
+    background: #413718;
+    color: #ffc857;
+}
+
+/* Priority */
+.priority-high {
+    color: #ff6868;
+}
+
+.priority-medium {
+    color: #ffc857;
+}
+
+.priority-low {
+    color: #55d88b;
+}
+.form-label{
+    font-weight: bold;
+        color: #000;
+}

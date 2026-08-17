@@ -1,0 +1,80 @@
+<div class="layout">
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.collapsed]="isCollapsed">
+
+    <div class="logo-section">
+      <button class="toggle-btn" (click)="toggleSidebar()">
+        ☰
+      </button>
+
+      <h3 *ngIf="!isCollapsed">Support</h3>
+    </div>
+
+    <nav class="menu">
+
+      <a routerLink="/index" routerLinkActive="active">
+        <i class="fas fa-chart-line"></i>
+        <span *ngIf="!isCollapsed">Dashboard</span>
+      </a>
+
+      <a routerLink="/admin-pannel" routerLinkActive="active">
+        <i class="fas fa-users"></i>
+        <span *ngIf="!isCollapsed">Admin Pannel</span>
+      </a>
+
+      <a routerLink="/user-registration" routerLinkActive="active">
+        <i class="fas fa-users"></i>
+        <span *ngIf="!isCollapsed">Register</span>
+      </a>
+      <a routerLink="/ticket-raise" routerLinkActive="active">
+        <i class="fas fa-users"></i>
+        <span *ngIf="!isCollapsed">Ticket Raise</span>
+      </a>
+      <!-- <a routerLink="/chat-box" routerLinkActive="active">
+        <i class="fas fa-robot"></i>
+        <span *ngIf="!isCollapsed">AI Chat</span>
+      </a> -->
+
+      <a routerLink="/support-team" routerLinkActive="active">
+        <i class="fas fa-file-alt"></i>
+        <span *ngIf="!isCollapsed">Support Team</span>
+      </a>
+
+      <a routerLink="/reports" routerLinkActive="active">
+        <i class="fas fa-file-alt"></i>
+        <span *ngIf="!isCollapsed">Reports</span>
+      </a>
+
+      <a routerLink="/settings" routerLinkActive="active">
+        <i class="fas fa-cog"></i>
+        <span *ngIf="!isCollapsed">Settings</span>
+      </a>
+
+    </nav>
+
+    <div class="sidebar-footer">
+      <i class="fas fa-user-circle"></i>
+      <span *ngIf="!isCollapsed">Admin</span>
+    </div>
+
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+
+    <div class="header">
+      <div class="header-left">
+        <h2></h2>
+      </div>
+
+      <div class="header-right">
+        <span>Welcome Admin</span>
+        <button class="btn-logout" (click)="Logout()">Logout</button>
+      </div>
+    </div>
+    <div class="main-content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+</div>

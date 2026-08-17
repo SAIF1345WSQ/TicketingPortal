@@ -1,0 +1,302 @@
+<div class="container-fluid py-4">
+
+    <div class="card shadow-sm border-0">
+
+        <!-- Header -->
+        <div class="card-header bg-primary text-white py-1 " style="border-radius: 10px;">
+            <div class="d-flex align-items-center justify-content-between">
+
+                <!-- Left -->
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-person-plus-fill fs-4 me-2"></i>
+                    <h5 class="mb-0">Employee Registration</h5>
+                </div>
+
+                <!-- Right -->
+                <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal"
+                    data-bs-target="#EmployeeModal" (click)="GetEmploye()">
+                    <i class="bi bi-people-fill me-1"></i>
+                    View Employee
+                </button>
+            </div>
+        </div>
+        <div class="modal fade" id="EmployeeModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Employee List</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <div class="card">
+                                <div class="ticket-table-container">
+
+                                    <div class="table-responsive">
+                                        <table class="ticket-table">
+                                            <thead>
+                                                <!-- Header -->
+                                                <tr>
+                                                    <th>Employee Code</th>
+                                                    <th>Employee Name</th>
+                                                    <th>Email ID</th>
+                                                    <th>Status</th>
+                                                    <th>Password</th>
+                                                    <th>Employee Type</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                                <!-- Filter row -->
+                                                <tr class="filter-row">
+                                                    <th>
+                                                        <input type="text" [(ngModel)]="filters.employeeCode"
+                                                            placeholder="Filter Ticket No" />
+                                                    </th>
+                                                    <th>
+                                                        <input type="text" [(ngModel)]="filters.empName"
+                                                            placeholder="Filter contactName" />
+                                                    </th>
+                                                    <th>
+                                                        <input type="text" [(ngModel)]="filters.emailId"
+                                                            placeholder="Filter Date" />
+                                                    </th>
+                                                    <th>
+                                                        <input type="text" [(ngModel)]="filters.isActive"
+                                                            placeholder="Filter Priority" />
+                                                    </th>
+                                                    <th>
+                                                        <input type="text" [(ngModel)]="filters.password"
+                                                            placeholder="Filter Priority" />
+                                                    </th>
+                                                    <th>
+                                                        <input type="text" [(ngModel)]="filters.empType"
+                                                            placeholder="Filter Error" />
+                                                    </th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <tr
+                                                    *ngFor=" let it of filterItems(employees)  | paginate: {itemsPerPage: 10,currentPage: p    } ">
+                                                    <td>{{it.employeeCode}} </td>
+                                                    <td>{{it.empName}} </td>
+                                                    <td>{{it.emailId}} </td>
+                                                    <td>
+                                                        <span class="badge"
+                                                            [ngClass]="it.isActive ? 'bg-success' : 'bg-danger'">
+                                                            {{ it.isActive ? 'Active' : 'Inactive' }}
+                                                        </span>
+                                                    </td>
+                                                    <td>{{it.password}} </td>
+                                                    <td>{{it.empType}} </td>
+                                                    <td class="action-buttons">
+                                                        <button type="button" class="icon-btn edit-btn"
+                                                            (click)="enableEdit(it)" title="Edit"
+                                                            data-bs-dismiss="modal">
+                                                            ✎
+                                                        </button>
+                                                        <!-- <button type="button" class="icon-btn delete-btn"
+                                                            (click)="DeleteSaveCompany(it)" title="Delete">
+                                                            🗑
+                                                        </button> -->
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- Pagination footer -->
+                                    <div class="table-footer">
+                                        <div class="items-per-page">
+                                            <span>Items per page</span>
+                                            <select [(ngModel)]="itemsPerPage" (change)="p = 1">
+                                                <option [value]="10">10</option>
+                                                <option [value]="20">20</option>
+                                                <option [value]="30">30</option>
+                                                <option [value]="50">50</option>
+                                            </select>
+                                        </div>
+                                        <div class="pagination-area">
+                                            <pagination-controls (pageChange)="p = $event" previousLabel=""
+                                                nextLabel="">
+                                            </pagination-controls>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-4">
+            <div class="row g-3">
+                <!-- Employee Code -->
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">
+                        Employee Code
+                    </label>
+
+                    <input type="text" class="form-control" placeholder="Enter Employee Code"
+                        [(ngModel)]="Addemployee.employeeCode" readonly>
+                </div>
+
+                <!-- Employee Name -->
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">
+                        Employee Name<strong class="text-danger">*</strong>
+                    </label>
+
+                    <input type=" text" class="form-control" placeholder="Enter Employee Name"
+                            [(ngModel)]="Addemployee.empName">
+                </div>
+                <!-- Email -->
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">
+                        Email<strong class="text-danger">*</strong>
+                    </label>
+
+                    <input type="email" class="form-control" placeholder="Enter Email" [(ngModel)]="Addemployee.emailId"
+                        name="emailId" required #emailId="ngModel"
+                        pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
+
+                    <div class="text-danger" *ngIf="emailId.invalid && emailId.touched">
+                        Please enter a valid email address
+                    </div>
+                </div>
+
+                <!-- Mobile -->
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">
+                        Mobile Number<strong class="text-danger">*</strong>
+                    </label>
+
+                    <input type="tel" class="form-control" pattern="[0-9]{10}" maxlength="10" minlength="10"
+                        placeholder="Mobile No." [(ngModel)]="Addemployee.phoneNumber"
+                        (blur)="CheckDigit(Addemployee.phoneNumber)" name="phoneNumber"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
+                </div>
+
+                <!-- Department -->
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">
+                        Department<strong class="text-danger">*</strong>
+                    </label>
+
+                    <select class="form-select" [(ngModel)]="Addemployee.department">
+
+                        <option value="">Select Department</option>
+                        <option value="IT">IT</option>
+                        <option value="HR">HR</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Sales">Sales</option>
+                        <option value="Purchase">Purchase</option>
+
+                    </select>
+                </div>
+
+                <!-- Designation -->
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">
+                        Designation<strong class="text-danger">*</strong>
+                    </label>
+
+                    <input type="text" class="form-control" placeholder="Enter Designation"
+                        [(ngModel)]="Addemployee.designation">
+                </div>
+
+                <!-- Status -->
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">
+                        Status<strong class="text-danger">*</strong>
+                    </label>
+                    <select class="form-select" [(ngModel)]="Addemployee.isActive">
+
+                        <option value="">Select Status</option>
+                        <option value="true">Active</option>
+                        <option value="false">Inactive</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">
+                        Employee Type<strong class="text-danger">*</strong>
+                    </label>
+                    <select class="form-select" [(ngModel)]="Addemployee.empType">
+                        <option value="" selected>select</option>
+                        <option value="Admin">Admin</option>
+                        <option value="SubAdmin">Sub Admin</option>
+                        <option value="SupeAdmnin">Super Admin</option>
+                        <option value="Employee">Employee</option>
+                    </select>
+                </div>
+                <!-- Password -->
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">
+                        Password<strong class="text-danger">*</strong>
+                    </label>
+                    <div class="input-group">
+                        <input [type]="showPassword ? 'text' : 'password'" class="form-control"
+                            [(ngModel)]="Addemployee.password" name="password" required minlength="4"
+                            #checkpassword="ngModel">
+                        <button type="button" class="btn btn-outline-secondary" (click)="showPassword = !showPassword">
+                            <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'">
+                            </i>
+                        </button>
+                    </div>
+                </div>
+                <!-- Confirm Password -->
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">
+                        Confirm Password<strong class="text-danger">*</strong>
+                    </label>
+                    <div class="input-group">
+                        <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control"
+                            [(ngModel)]="Addemployee.confirmPassword" name="confirmPassword" required
+                            #confirmPassword="ngModel">
+                        <button type="button" class="btn btn-outline-secondary"
+                            (click)="showConfirmPassword = !showConfirmPassword">
+
+                            <i class="bi" [ngClass]="showConfirmPassword ? 'bi-eye-slash' : 'bi-eye'">
+                            </i>
+                        </button>
+                    </div>
+                    <div class="text-danger" *ngIf="Addemployee.password !== Addemployee.confirmPassword &&
+                             (confirmPassword.touched || submitted)">
+                        Password and Confirm Password do not match
+                    </div>
+                </div>
+                <!-- Address -->
+                <div class="col-md-12">
+                    <label class="form-label fw-semibold">
+                        Address
+                    </label>
+
+                    <textarea class="form-control" rows="3" placeholder="Enter Address"
+                        [(ngModel)]="Addemployee.address">
+                    </textarea>
+                </div>
+            </div>
+            <!-- Buttons -->
+            <div class="d-flex justify-content-end gap-2 mt-4">
+                <button type="button" class="btn btn-secondary">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i>
+                    Reset
+
+                </button>
+                <button type="button" class="btn btn-primary" (click)="Save()">
+
+                    <i class="bi bi-person-plus-fill me-1"></i>
+                    Register Employee
+
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

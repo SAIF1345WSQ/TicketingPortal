@@ -1,0 +1,491 @@
+<div class="ticket-console">
+
+    <div class="console-grid" aria-hidden="true"></div>
+
+    <div class="console-card">
+        <!-- Header -->
+        <header class="console-header">
+            <div class="header-left">
+                <div class="ticket-badge">
+                    🎫 Support Ticket No.
+                </div>
+                <input type="text" class="ticket-number" [(ngModel)]="ticket.ticketNo" placeholder="TCK-0000-0000">
+            </div>
+
+            <div class="header-right">
+                <button type="button" class="btn btn-primary" (click)="GerTicket()" data-bs-toggle="modal"
+                    data-bs-target="#CompanyModal">
+                    Find
+                </button>
+
+                <button type="button" class="btn btn-success" (click)="submitTicket()">
+                    Save
+                </button>
+            </div>
+        </header>
+        <!--MODAL OPEN-->
+        <div class="modal fade" id="CompanyModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Company List</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <div class="card">
+                                <div class="ticket-table-container">
+
+                                    <div class="table-responsive">
+                                        <table class="ticket-table">
+                                            <thead>
+                                                <!-- Header -->
+                                                <tr>
+                                                    <th>Ticket.No</th>
+                                                    <th>Contact Name</th>
+                                                    <th>Customer Code</th>
+                                                    <th>Ticket Status</th>
+                                                    <th>Date</th>
+                                                    <th>Module</th>
+                                                    <th>Priority</th>
+                                                    <th>Error Message</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                                <!-- Filter row -->
+                                                <tr class="filter-row">
+                                                    <th>
+                                                        <input type="text" [(ngModel)]="filters.ticketNo"
+                                                            placeholder="Filter Ticket No" />
+                                                    </th>
+
+                                                    <th>
+                                                        <input type="text" [(ngModel)]="filters.contactName"
+                                                            placeholder="Filter contactName" />
+                                                    </th>
+                                                    <th>
+                                                        <input type="text" [(ngModel)]="filters.customerCode"
+                                                            placeholder="Filter Status" />
+                                                    </th>
+                                                    <th>
+                                                        <input type="text" [(ngModel)]="filters.ticketStatus"
+                                                            placeholder="Filter ticketStatus" />
+                                                    </th>
+
+                                                    <th>
+                                                        <input type="text" [(ngModel)]="filters.dateTime"
+                                                            placeholder="Filter Date" />
+                                                    </th>
+
+                                                    <th>
+                                                        <input type="text" [(ngModel)]="filters.module"
+                                                            placeholder="Filter Module" />
+                                                    </th>
+
+                                                    <th>
+                                                        <input type="text" [(ngModel)]="filters.priority"
+                                                            placeholder="Filter Priority" />
+                                                    </th>
+
+                                                    <th>
+                                                        <input type="text" [(ngModel)]="filters.errorMessage"
+                                                            placeholder="Filter Error" />
+                                                    </th>
+
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="
+                                                    let it of filterItems(modalCompany)
+                                                    | paginate: {
+                                                        itemsPerPage: 10,
+                                                        currentPage: p
+                                                    }
+                                                ">
+                                                    <td>{{ it.ticketNo }}</td>
+                                                    <td>{{ it.contactName }}</td>
+                                                    <td>{{ it.customerCode }}</td>
+                                                    <td>
+                                                        <span class="status-badge" [ngClass]="{
+                                                                                                                'status-open': it.ticketStatus === 'Open',
+                                                                                                                'status-closed': it.ticketStatus === 'Closed',
+                                                                                                                'status-pending': it.ticketStatus === 'Pending'
+                                                                                                            }">
+                                                            {{ it.ticketStatus }}
+                                                        </span>
+                                                    </td>
+                                                    <td>{{ it.dateTime }}</td>
+                                                    <td>{{ it.module }}</td>
+                                                    <td>
+                                                        <span class="priority-badge" [ngClass]="{
+                                                            'priority-high': it.priority === 'High',
+                                                            'priority-medium': it.priority === 'Medium',
+                                                            'priority-low': it.priority === 'Low'
+                                                        }">
+                                                            {{ it.priority }}
+                                                        </span>
+                                                    </td>
+                                                    <td class="error-message">
+                                                        {{ it.errorMessage }}
+                                                    </td>
+                                                    <td class="action-buttons">
+                                                        <button type="button" class="icon-btn edit-btn"
+                                                            (click)="enableEdit(it)" title="Edit"
+                                                            data-bs-dismiss="modal">
+                                                            ✎
+                                                        </button>
+                                                        <!-- <button type="button" class="icon-btn delete-btn"
+                                                            (click)="DeleteSaveCompany(it)" title="Delete">
+                                                            🗑
+                                                        </button> -->
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- Pagination footer -->
+                                    <div class="table-footer">
+                                        <div class="items-per-page">
+                                            <span>Items per page</span>
+                                            <select [(ngModel)]="itemsPerPage" (change)="p = 1">
+                                                <option [value]="10">10</option>
+                                                <option [value]="20">20</option>
+                                                <option [value]="30">30</option>
+                                                <option [value]="50">50</option>
+                                            </select>
+                                        </div>
+                                        <div class="pagination-area">
+                                            <pagination-controls (pageChange)="p = $event" previousLabel=""
+                                                nextLabel="">
+                                            </pagination-controls>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="assignEmployeeModal" tabindex="-1" aria-labelledby="assignEmployeeModalLabel"
+            aria-hidden="true">
+
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="assignEmployeeModalLabel">
+                            Assign Employee
+                        </h5>
+
+                        <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="table-responsive">
+
+                            <table class="table table-hover table-bordered align-middle">
+
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>assignedTo </th>
+                                        <th>taskStatus</th>
+                                        <th>startDate</th>
+                                        <th>completeDate</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- data here -->
+                                    <tr *ngFor="let i of AssignedTask">
+
+                                        <td>{{ i.assignedTo }}</td>
+                                        <td>
+                                            {{ i.taskStatus }}
+                                        </td>
+                                        <td>
+                                            {{ i.startDate }}
+                                        </td>
+                                        <td>
+                                            {{ i.completeDate }}
+                                        </td>
+
+                                        <!-- Update Task Status -->
+                                        <td>
+                                            <select class="form-select" [(ngModel)]="i.taskStatus">
+                                                <option value="" selected>Select Status</option>
+                                                <option value="Pending">Pending</option>
+                                                <option value="Working">Working</option>
+                                                <option value="Hold">Hold</option>
+                                                <option value="Done">Done</option>
+                                                <option value="Reject">Reject</option>
+
+                                            </select>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="button" class="btn btn-primary">
+                            Assign
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Lifecycle rail -->
+        <div class="ticket-progress">
+            <div class="step" [class.active]="ticket.ticketNo">
+                <div class="step-circle">1</div>
+                <div class="step-title">Logged</div>
+            </div>
+
+            <div class="step-line"></div>
+
+            <div class="step" [class.active]="ticket.acknowledgeDateTime">
+                <div class="step-circle">2</div>
+                <div class="step-title">Acknowledged</div>
+            </div>
+
+            <div class="step-line"></div>
+
+            <div class="step" [class.active]="ticket.assignedDate">
+                <div class="step-circle">3</div>
+                <div class="step-title">Assigned</div>
+            </div>
+
+            <div class="step-line"></div>
+
+            <div class="step" [class.active]="ticket.clientStatusDateTime">
+                <div class="step-circle">4</div>
+                <div class="step-title">Client Review</div>
+            </div>
+
+            <div class="step-line"></div>
+
+            <div class="step" [class.active]="ticket.closureDateTime">
+                <div class="step-circle">5</div>
+                <div class="step-title">Closed</div>
+            </div>
+
+        </div>
+        <!-- Issue Details -->
+        <section class="panel panel-internal">
+            <div class="panel-heading">
+                <span class="panel-eyebrow"><strong>Issue Details</strong> </span>
+            </div>
+            <fieldset [disabled]="isEmployee">
+                <div class="panel-grid four-col">
+                    <div class="field">
+                        <label>Ticket Category</label>
+                        <select class="form-select" [(ngModel)]="ticket.category">
+                            <option>Authorization Issue</option>
+                            <option>Inventory</option>
+                            <option>Finance</option>
+                            <option>Production</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>Module</label>
+                        <input type="text" class="form-control" [(ngModel)]="ticket.module"
+                            placeholder="e.g. Billing Engine">
+                    </div>
+
+                    <div class="field">
+                        <label>Priority</label>
+                        <select class="form-select priority-select" [(ngModel)]="ticket.priority">
+                            <option>Low</option>
+                            <option selected>Medium</option>
+                            <option>High</option>
+                            <option>Critical</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>Subject</label>
+                        <input type="text" class="form-control" [(ngModel)]="ticket.subject"
+                            placeholder="Short summary">
+                    </div>
+
+                    <div class="field span-2">
+                        <label>Error Message</label>
+                        <input type="text" class="form-control mono-input" [(ngModel)]="ticket.errorMessage"
+                            placeholder="Paste exact error text, if any">
+                    </div>
+                </div>
+                <div class="panel-grid two-col mt-3">
+                    <div class="field">
+                        <label>Detailed Description</label>
+                        <textarea rows="3" class="form-control" [(ngModel)]="ticket.description"></textarea>
+                    </div>
+                    <div class="field">
+                        <label>Steps To Reproduce</label>
+                        <textarea rows="3" class="form-control" [(ngModel)]="ticket.stepsToReproduce"></textarea>
+                    </div>
+                </div>
+            </fieldset>
+        </section>
+        <!-- Contact -->
+        <section class="panel">
+            <div class="panel-heading">
+                <span class="panel-eyebrow"> Contact</span>
+            </div>
+
+            <div class="panel-grid four-col">
+                <div class="field">
+                    <label>Contact Person Name</label>
+                    <input type="text" class="form-control" [(ngModel)]="ticket.contactName">
+                </div>
+                <div class="field">
+                    <label>Email ID</label>
+                    <input type="email" class="form-control" [(ngModel)]="ticket.contactEmail">
+                </div>
+                <div class="field">
+                    <label>Contact No.</label>
+                    <input type="tengxt" class="form-control mono-input" [(ngModel)]="ticket.contactNo">
+                </div>
+                <div class="field">
+                    <label>Submission Date & Time</label>
+                    <input type="datetime-local" class="form-control mono-input" [(ngModel)]="ticket.contactSubDate">
+                </div>
+            </div>
+        </section>
+        <div *ngIf="isEmployee">
+            <!-- Internal Tracking (visually elevated to separate from client-facing data) -->
+            <section class="panel panel-internal">
+                <div class="panel-heading">
+                    <span class="panel-eyebrow accent-violet">Internal Tracking</span>
+                </div>
+
+                <div class="panel-grid four-col">
+                    <div class="field">
+                        <label>Acknowledge By</label>
+                        <select class="form-control" [(ngModel)]="ticket.acknowledgeBy">
+                            <option value="">--Select--</option>
+                            <option *ngFor="let emp of employees" [value]="emp.employeeCode">
+                                {{ emp.employeeCode }} -->{{emp.empName}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>Acknowledge Date &amp; Time</label>
+                        <input type="datetime-local" class="form-control mono-input"
+                            [(ngModel)]="ticket.acknowledgeDateTime">
+                    </div>
+                    <div class="field">
+                        <label>Assigned To</label>
+                        <div class="input-group">
+
+                            <select class="form-control" [(ngModel)]="ticket.assignedTo">
+                                <option value="">--Select--</option>
+                                <option *ngFor="let emp of employees" [value]="emp.employeeCode">
+                                    {{ emp.employeeCode }} --> {{ emp.empName }}
+                                </option>
+                            </select>
+                            <button type="button" title="Task Status"
+                                (click)="GetTaskstatus(ticket.assignedTo,ticket.ticketNo)" data-bs-toggle="modal"
+                                data-bs-target="#assignEmployeeModal">
+                                <i class="bi bi-arrow-right text-success"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                    <div class="field">
+                        <label>Assigned Date</label>
+                        <input type="datetime-local" class="form-control mono-input" [(ngModel)]="ticket.assignedDate">
+                    </div>
+                    <div class="field">
+                        <label>Closure Date &amp; Time (To Client)</label>
+                        <input type="datetime-local" class="form-control mono-input"
+                            [(ngModel)]="ticket.closureDateTimeToClient">
+                    </div>
+                    <div class="field">
+                        <label>Closed By Team On</label>
+                        <input type="datetime-local" class="form-control mono-input"
+                            [(ngModel)]="ticket.closedByTeamOn">
+                    </div>
+                    <div class="field">
+                        <label>Client Status</label>
+                        <select class="form-select" [(ngModel)]="ticket.clientStatus">
+                            <option value="">Select Status</option>
+                            <option>Open</option>
+                            <option>In Progress</option>
+                            <option>Resolved</option>
+                            <option>Closed</option>
+                            <option>Rejected</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>Client Status Dt &amp; Time</label>
+                        <input type="datetime-local" class="form-control mono-input"
+                            [(ngModel)]="ticket.clientStatusDateTime">
+                    </div>
+                    <div class="field">
+                        <label>Closure Date &amp; Time (To Client)</label>
+                        <input type="datetime-local" class="form-control mono-input"
+                            [(ngModel)]="ticket.closureDateTime">
+                    </div>
+                    <div class="field span-3">
+                        <label>Client Remarks</label>
+                        <textarea class="form-control" rows="2" [(ngModel)]="ticket.clientRemarks"></textarea>
+                    </div>
+                </div>
+            </section>
+            <!-- Client Status -->
+            <section class="panel">
+                <div class="panel-heading">
+                    <span class="panel-eyebrow"> Client Status</span>
+                </div>
+
+                <div class="panel-grid four-col">
+                    <div class="field">
+                        <label>Contact No. (On Choice of Admin)</label>
+                        <input type="text" class="form-control mono-input" [(ngModel)]="ticket.contactNoAdmin">
+                    </div>
+                    <div class="field">
+                        <label>Email ID</label>
+                        <input type="email" class="form-control" [(ngModel)]="ticket.emailId">
+                    </div>
+                    <div class="field">
+                        <label>Closure Date &amp; Time (To Admin)</label>
+                        <input type="datetime-local" class="form-control mono-input"
+                            [(ngModel)]="ticket.closureDateTimeAdmin">
+                    </div>
+                    <div class="field">
+                        <label>Actual Completion Date &amp; Time</label>
+                        <input type="datetime-local" class="form-control mono-input"
+                            [(ngModel)]="ticket.actualCompletionDateTime">
+                    </div>
+                    <div class="field">
+                        <label>Time Taken Vs Time Allocated</label>
+                        <input type="text" class="form-control mono-input" [(ngModel)]="ticket.timeTakenVsAllocated"
+                            readonly>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!-- Actions -->
+        <footer class="console-actions">
+            <button type="button" class="btn btn-ghost">Reset</button>
+            <button type="button" class="btn btn-primary" (click)="saveTicket(ticket)">
+                <span>Submit Ticket</span>
+            </button>
+        </footer>
+    </div>
+</div>

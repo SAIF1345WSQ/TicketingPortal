@@ -1,0 +1,50 @@
+<div class="chat-container">
+
+   
+    <div class="chat-body">
+
+        <div *ngFor="let msg of messages">
+
+            <!-- User Message -->
+            <div class="message user-message" *ngIf="msg.type=='user'">
+                <div class="message-content">
+                    {{msg.text}}
+                </div>
+            </div>
+
+            <!-- AI Message -->
+            <div class="message ai-message" *ngIf="msg.type=='ai'">
+                <div class="ai-avatar">
+                    🤖
+                </div>
+
+                <div class="message-content">
+                    {{msg.text}}
+                </div>
+            </div>
+
+        </div>
+
+        <div class="typing" *ngIf="isLoading">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+    </div>
+
+    <div class="input-section">
+
+        <textarea
+            [(ngModel)]="userPrompt"
+            placeholder="Ask SAP AI anything..."
+            (keydown.enter)="sendMessage()">
+        </textarea>
+
+        <button (click)="sendMessage()">
+            ➤
+        </button>
+
+    </div>
+
+</div>

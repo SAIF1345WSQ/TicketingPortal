@@ -1,0 +1,147 @@
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.header-left h2 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 28px;
+}
+
+.header-left p {
+    margin: 4px 0 0;
+    color: #64748b;
+}
+
+.header-right {
+    display: flex;
+    gap: 10px;
+}
+
+.header-right .btn {
+    min-width: 100px;
+    font-weight: 600;
+    border-radius: 8px;
+}
+.form-label {
+    font-weight: bold;
+    color: #000;
+}
+<!-- -->
+.customer-container {
+    padding: 25px;
+    background: #f5f7fb;
+    min-height: 100vh;
+}
+
+.page-header {
+    margin-bottom: 20px;
+}
+
+.page-header h2 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 28px;
+}
+
+.page-header p {
+    color: #64748b;
+    margin-top: 5px;
+}
+
+.form-card,
+.engineer-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+.form-grid,
+.engineer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+}
+
+.field label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 6px;
+}
+
+.field input,
+.field select,
+.field textarea {
+    padding: 11px 14px;
+    border: 1px solid #dbe3ec;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: .3s;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, .15);
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.engineer-card h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #1e293b;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn-save {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-reset {
+    background: #e2e8f0;
+    color: #334155;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-save:hover {
+    background: #1d4ed8;
+}
+
+.btn-reset:hover {
+    background: #cbd5e1;
+}
+
+
