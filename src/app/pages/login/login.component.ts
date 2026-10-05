@@ -47,6 +47,7 @@ export class LoginComponent {
           err.error ||
           err.message ||
           'Something went wrong';
+        alert(err.error?.message || 'Something went wrong');
       }
     });
 

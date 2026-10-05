@@ -55,14 +55,17 @@ export class SupportTeamComponent implements OnInit {
     taskStatus: '',
     startDate: '',
     completeDate: '',
-    timeTaken: ''
-    
-
+    timeTaken: '',
+    empRemarks: '',
+    adminRemarks: '',
   };
   sessionId: any = '';
   filters: any = {};
   p: number = 1;
   itemsPerPage: number = 10;
+
+  pendingtask: any[] = [];
+
   constructor(private Services: TicketService) { };
   AssignTicket: any[] = [];
   ngOnInit(): void {
@@ -72,11 +75,14 @@ export class SupportTeamComponent implements OnInit {
         next: (res: any) => {
 
           this.AssignTicket = res.filter((x: any) => x.assignedTo == this.sessionId);
-          const modalElement = document.getElementById('AssignModla');
-
-          if (modalElement) {
+          for (let i = 0; i < this.AssignTicket.length; i++) {
+            if (this.AssignTicket[i].taskStatus == null || this.AssignTicket[i].taskStatus == 'Rejected') {
+              this.pendingtask.push(this.AssignTicket[i]);
+            }
 
           }
+          const modalElement = document.getElementById('AssignModla');
+
         },
         error(error) {
           alert(error.errorMessage);
@@ -84,6 +90,16 @@ export class SupportTeamComponent implements OnInit {
         }
       });
     }
+  }
+  GetRejTaskByAdmin() {
+    this.Services.GetRejTaskByAdminService().subscribe({
+      next: (res: any[]) => {
+        for (let i = 0; i < this.AssignTicket.length; i++) {
+         
+
+        }
+      }
+    })
   }
   filterItems(items: any[]) {
     return items.filter(item =>
@@ -105,7 +121,7 @@ export class SupportTeamComponent implements OnInit {
   SaveTask() {
     if (this.ticket.id != null || this.ticket.id != '') {
       this.ticket.id = this.ticket.id.toString();
-      this.Services.UpdateTcket(this.ticket).subscribe({
+      this.Services.UpdateTcketByTeam(this.ticket).subscribe({
         next: (res) => {
           if (res.status) {
             alert("Save Successfully");
@@ -114,7 +130,7 @@ export class SupportTeamComponent implements OnInit {
           else {
             alert(res.message);
           }
-        },error(error) {
+        }, error(error) {
           alert(error.errorMessage);
           console.log(error.errorMessage);
         }

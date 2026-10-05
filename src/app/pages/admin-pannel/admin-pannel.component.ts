@@ -124,8 +124,72 @@ export class AdminPannelComponent implements OnInit {
       this.employees = [...res];
     });
   }
-  saveEmployee() {
+  ValidationCheck() {
+    const c = this.customer;
 
+    if (!c.customerCode?.trim()) {
+      alert("Customer Code is required");
+      return;
+    }
+
+    if (!c.companyName?.trim()) {
+      alert("Company Name is required");
+      return;
+    }
+
+    if (!c.contactPerson?.trim()) {
+      alert("Contact Person is required");
+      return;
+    }
+
+    if (!c.mobileNumber?.trim()) {
+      alert("Mobile Number is required");
+      return;
+    }
+    if (!/^[0-9]{10}$/.test(c.mobileNumber)) {
+      alert("Mobile Number must be 10 digits");
+      return;
+    }
+    if (!c.emailId?.trim()) {
+      alert("Email ID is required");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.emailId)) {
+      alert("Please enter a valid Email ID");
+      return;
+    }
+
+    if (!c.sapVersion?.trim()) {
+      alert("SAP Version is required");
+      return;
+    }
+
+    if (!c.gstNumber?.trim()) {
+      alert("GST Number is required");
+      return;
+    }
+
+    if (!c.panNumber?.trim()) {
+      alert("PAN Number is required");
+      return;
+    }
+
+    if (!c.projectManager?.trim()) {
+      alert("Project Manager is required");
+      return;
+    }
+
+    if (!c.supportTeam?.trim()) {
+      alert("Support Team is required");
+      return;
+    }
+
+    return {
+      valid: true,
+      message: 'Validation successful'
+    };
+  }
+  saveEmployee() {
     if (this.Addemployee.empName == null || this.Addemployee.empName == '') {
       this.ErrorMessage = "empname is mandotry";
       return;
@@ -197,6 +261,10 @@ export class AdminPannelComponent implements OnInit {
     else if (this.engineers == null) {
       this.ErrorMessage = "Please Fill All Enginners details";
     }
+    const validationError = this.ValidationCheck();
+    if (!validationError) {
+      return;
+    }
     this.customer.Rowengineers = [...this.engineers];
     if (this.customer.id == '' || this.customer.id == null || this.customer.id == undefined) {
       this.AdminService.Save(this.customer).subscribe({
@@ -219,6 +287,7 @@ export class AdminPannelComponent implements OnInit {
             err.message ||
             'Something went wrong';
           this.ErrorMessage = message;
+          alert(err.message);
         }
       });
     }
@@ -272,6 +341,20 @@ export class AdminPannelComponent implements OnInit {
       }
     }
   }
+
+  UserTotVerify() {
+
+    var total =
+      (Number(this.customer.sapNoOfProfessionalUsers) || 0) +
+      (Number(this.customer.sapNoOfLimitedUsers) || 0);
+
+    if (total > Number(this.customer.sapnoOfUsers)) {
+      alert("Professional Users cannot be greater than Total Users");
+      this.customer.sapNoOfProfessionalUsers = '';
+      this.customer.sapNoOfLimitedUsers = '';
+    }
+  }
+
   DeleteSaveCompany(data: any) {
 
   }

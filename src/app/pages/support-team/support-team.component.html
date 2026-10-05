@@ -1,13 +1,20 @@
 <div class="container-fluid mt-4">
 
     <div class="page-header">
-
         <div class="header-left">
             <h2>My Assigned Task</h2>
         </div>
         <div class="header-right">
+            <button type="button" class="btn position-relative border-0 bg-transparent" data-bs-toggle="modal"
+                data-bs-target="#RejectTaskorPendingtask">
+                <i class="bi bi-bell-fill text-warning fs-5"></i>
+                <span class="position-absolute top-0 start-75 translate-middle badge rounded-pill bg-danger">
+                    {{pendingtask.length}}
+                </span>
+            </button>
             <button class="btn-reset">Reset</button>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AssignModla">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AssignModla"
+                (click)="GetRejTaskByAdmin()">
                 Find
             </button>
             <button type="button" class="btn btn-success" (click)="SaveTask()">
@@ -15,7 +22,6 @@
             </button>
         </div>
     </div>
-
     <div class="modal fade" id="AssignModla" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
@@ -32,9 +38,7 @@
                                     <div class="table-responsive">
 
                                         <table class="table table-hover table-bordered align-middle">
-
                                             <thead>
-
                                                 <!-- Header Row -->
                                                 <tr>
                                                     <th>Ticket No</th>
@@ -43,35 +47,31 @@
                                                     <th>Ticket Status</th>
                                                     <th>Acknowledge Status</th>
                                                     <th>Date</th>
+                                                    <th>Status</th>
                                                     <th>Module</th>
                                                     <th>Priority</th>
                                                     <th>Error Message</th>
                                                     <th>Action</th>
                                                 </tr>
-
                                                 <!-- Filter Row -->
                                                 <tr class="filter-row">
-
                                                     <!-- Ticket No -->
                                                     <th>
                                                         <input type="text" class="form-control form-control-sm"
                                                             [(ngModel)]="filters.ticketNo" placeholder="Ticket No">
                                                     </th>
-
                                                     <!-- Contact Name -->
                                                     <th>
                                                         <input type="text" class="form-control form-control-sm"
                                                             [(ngModel)]="filters.contactName"
                                                             placeholder="Contact Name">
                                                     </th>
-
                                                     <!-- Customer Code -->
                                                     <th>
                                                         <input type="text" class="form-control form-control-sm"
                                                             [(ngModel)]="filters.customerCode"
                                                             placeholder="Customer Code">
                                                     </th>
-
                                                     <!-- Ticket Status -->
                                                     <th>
                                                         <select class="form-select form-select-sm"
@@ -101,6 +101,10 @@
                                                     <th>
                                                         <input type="text" class="form-control form-control-sm"
                                                             [(ngModel)]="filters.dateTime" placeholder="Date">
+                                                    </th>
+                                                    <th>
+                                                        <input type="text" class="form-control form-control-sm"
+                                                            [(ngModel)]="filters.taskStatus" placeholder="Task Status">
                                                     </th>
 
                                                     <!-- Module -->
@@ -189,6 +193,14 @@
 
                                                     <!-- Module -->
                                                     <td>
+                                                    <span [ngClass]="{
+                                                        'text-danger': it.taskStatus === 'Rejected',
+                                                        'text-success': it.taskStatus === 'Resolved'
+                                                    }">
+                                                        {{ it.taskStatus }}
+                                                    </span>
+                                                    </td>
+                                                    <td>
                                                         {{ it.module }}
                                                     </td>
 
@@ -260,10 +272,7 @@
             </div>
         </div>
     </div>
-
-
     <div class="container-fluid mt-4">
-
         <div class="card shadow-sm">
 
             <div class="card-header bg-primary text-white">
@@ -271,9 +280,7 @@
             </div>
 
             <div class="card-body">
-
                 <div class="row g-3">
-
                     <!-- Ticket No -->
                     <div class="col-md-3">
                         <label class="form-label">Ticket No</label>
@@ -302,7 +309,6 @@
                         <input type="text" class="form-control" [(ngModel)]="ticket.customerCode"
                             placeholder="Custoemr Code " readonly>
                     </div>
-
                     <!-- Ticket Status -->
                     <div class="col-md-3">
                         <label class="form-label">Ticket Status</label>

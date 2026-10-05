@@ -1,46 +1,153 @@
-<div class="dashboard">
+<div class="portal">
 
-  <div class="cards">
+  <!-- Sidebar -->
 
-    <div class="card">
-      <h2>150</h2>
-      <p>Total Users</p>
-    </div>
 
-    <div class="card">
-      <h2>450</h2>
-      <p>Total Queries</p>
-    </div>
+  <!-- Main -->
+  <div class="main">
+    <!-- Content -->
+    <main class="content">
+      <!-- Stat cards -->
+      <section class="stats">
+        <div class="stat-card">
+          <p class="stat-label">Open Issues</p>
+          <p class="stat-value">128</p>
+          <p class="stat-delta up">+12 this week</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Pending Acknowledgment</p>
+          <p class="stat-value">24</p>
+          <p class="stat-delta warn">Needs attention</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Assigned Tasks</p>
+          <p class="stat-value">76</p>
+          <p class="stat-delta up">+5 today</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Reassigned Tasks</p>
+          <p class="stat-value">9</p>
+          <p class="stat-delta neutral">Last 7 days</p>
+        </div>
+      </section>
+      <!-- Table + activity -->
+      <section class="panels">
+        <div class="panel table-panel">
+          <div class="panel-header">
+            <h2>Recent Tasks</h2>
+            <a class="panel-link" href="#">View all</a>
+          </div>
+          <table class="task-table">
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Employee</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Due</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <p class="task-title">Login page throwing 500 error</p>
+                  <p class="task-id">#TKT-1042</p>
+                </td>
+                <td>Riya Sharma</td>
+                <td><span class="status-dot dot-pending"></span>Pending Acknowledgment</td>
+                <td><span class="priority priority-high">High</span></td>
+                <td>Today</td>
+              </tr>
+              <tr>
+                <td>
+                  <p class="task-title">Update employee onboarding form</p>
+                  <p class="task-id">#TKT-1041</p>
+                </td>
+                <td>Arjun Mehta</td>
+                <td><span class="status-dot dot-assigned"></span>Assigned</td>
+                <td><span class="priority priority-medium">Medium</span></td>
+                <td>Tomorrow</td>
+              </tr>
+              <tr>
+                <td>
+                  <p class="task-title">VPN access request stuck in queue</p>
+                  <p class="task-id">#TKT-1039</p>
+                </td>
+                <td>Neha Kapoor</td>
+                <td><span class="status-dot dot-reassigned"></span>Reassigned</td>
+                <td><span class="priority priority-high">High</span></td>
+                <td>Sep 20</td>
+              </tr>
+              <tr>
+                <td>
+                  <p class="task-title">Printer offline on 3rd floor</p>
+                  <p class="task-id">#TKT-1035</p>
+                </td>
+                <td>Sameer Iyer</td>
+                <td><span class="status-dot dot-closed"></span>Closed</td>
+                <td><span class="priority priority-low">Low</span></td>
+                <td>Sep 15</td>
+              </tr>
+              <tr>
+                <td>
+                  <p class="task-title">New employee laptop setup</p>
+                  <p class="task-id">#TKT-1033</p>
+                </td>
+                <td>Divya Nair</td>
+                <td><span class="status-dot dot-assigned"></span>Assigned</td>
+                <td><span class="priority priority-medium">Medium</span></td>
+                <td>Sep 22</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-    <div class="card">
-      <h2>50</h2>
-      <p>Today's Queries</p>
-    </div>
+        <div class="panel activity-panel">
+          <div class="panel-header">
+            <h2>Recent Activity</h2>
+          </div>
 
-    <div class="card">
-      <h2>98%</h2>
-      <p>Success Rate</p>
-    </div>
+          <ul class="activity-list">
+            <li>
+              <span class="status-dot dot-assigned"></span>
+              <div>
+                <p class="activity-text"><strong>Arjun Mehta</strong> was assigned Task #TKT-1041</p>
+                <p class="activity-time">10 minutes ago</p>
+              </div>
+            </li>
+            <li>
+              <span class="status-dot dot-pending"></span>
+              <div>
+                <p class="activity-text">Task #TKT-1042 is awaiting acknowledgment</p>
+                <p class="activity-time">32 minutes ago</p>
+              </div>
+            </li>
+            <li>
+              <span class="status-dot dot-reassigned"></span>
+              <div>
+                <p class="activity-text">Task #TKT-1039 reassigned from Vikram Rao to Neha Kapoor</p>
+                <p class="activity-time">1 hour ago</p>
+              </div>
+            </li>
+            <li>
+              <span class="status-dot dot-closed"></span>
+              <div>
+                <p class="activity-text">Task #TKT-1035 marked as Closed</p>
+                <p class="activity-time">Yesterday</p>
+              </div>
+            </li>
+            <li>
+              <span class="status-dot dot-new"></span>
+              <div>
+                <p class="activity-text">New employee <strong>Divya Nair</strong> added to team</p>
+                <p class="activity-time">Yesterday</p>
+              </div>
+            </li>
+          </ul>
+        </div>
 
+      </section>
+
+    </main>
   </div>
-
-  <div class="chart-row">
-
-    <div class="chart-card">
-      <h5>Query Trend</h5>
-      <canvas id="queryChart"></canvas>
-    </div>
-
-    <div class="chart-card">
-      <h5>Sales Trend</h5>
-      <canvas id="barChart"></canvas>
-    </div>
-
-    <div class="chart-card">
-      <h5>Department Distribution</h5>
-      <canvas id="donutChart"></canvas>
-    </div>
-
-  </div>
-
 </div>

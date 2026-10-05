@@ -1,7 +1,6 @@
 <div class="container-fluid py-4">
 
     <div class="card shadow-sm border-0">
-
         <!-- Header -->
         <div class="card-header bg-primary text-white py-1 " style="border-radius: 10px;">
             <div class="d-flex align-items-center justify-content-between">
@@ -49,32 +48,31 @@
                                                 <tr class="filter-row">
                                                     <th>
                                                         <input type="text" [(ngModel)]="filters.employeeCode"
-                                                            placeholder="Filter Ticket No" />
+                                                            placeholder="Filter employeeCode " />
                                                     </th>
                                                     <th>
                                                         <input type="text" [(ngModel)]="filters.empName"
-                                                            placeholder="Filter contactName" />
+                                                            placeholder="Filter Employee Name" />
                                                     </th>
                                                     <th>
                                                         <input type="text" [(ngModel)]="filters.emailId"
-                                                            placeholder="Filter Date" />
+                                                            placeholder="Filter Email ID " />
                                                     </th>
                                                     <th>
                                                         <input type="text" [(ngModel)]="filters.isActive"
-                                                            placeholder="Filter Priority" />
+                                                            placeholder="Filter Status" />
                                                     </th>
                                                     <th>
                                                         <input type="text" [(ngModel)]="filters.password"
-                                                            placeholder="Filter Priority" />
+                                                            placeholder="Filter Password" />
                                                     </th>
                                                     <th>
                                                         <input type="text" [(ngModel)]="filters.empType"
-                                                            placeholder="Filter Error" />
+                                                            placeholder="Filter Employee Type" />
                                                     </th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
-
                                             <tbody>
                                                 <tr
                                                     *ngFor=" let it of filterItems(employees)  | paginate: {itemsPerPage: 10,currentPage: p    } ">
@@ -95,10 +93,9 @@
                                                             data-bs-dismiss="modal">
                                                             ✎
                                                         </button>
-                                                        <!-- <button type="button" class="icon-btn delete-btn"
-                                                            (click)="DeleteSaveCompany(it)" title="Delete">
-                                                            🗑
-                                                        </button> -->
+                                                        <button type="button" class="icon-btn delete-btn"
+                                                            (click)="DeleteEmpl(it)" title="Delete">
+                                                        </button>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -141,7 +138,7 @@
                         Employee Code
                     </label>
 
-                    <input type="text" class="form-control" placeholder="Enter Employee Code"
+                    <input type="text" class="form-control" placeholder="Employee Code"
                         [(ngModel)]="Addemployee.employeeCode" readonly>
                 </div>
 
@@ -152,7 +149,7 @@
                     </label>
 
                     <input type=" text" class="form-control" placeholder="Enter Employee Name"
-                            [(ngModel)]="Addemployee.empName">
+                        [(ngModel)]="Addemployee.empName">
                 </div>
                 <!-- Email -->
                 <div class="col-md-3">
@@ -285,18 +282,12 @@
                 <button type="button" class="btn btn-secondary">
                     <i class="bi bi-arrow-counterclockwise me-1"></i>
                     Reset
-
                 </button>
                 <button type="button" class="btn btn-primary" (click)="Save()">
-
                     <i class="bi bi-person-plus-fill me-1"></i>
                     Register Employee
-
                 </button>
-
             </div>
-
         </div>
     </div>
-
 </div>

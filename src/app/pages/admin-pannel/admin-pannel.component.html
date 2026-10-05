@@ -1,7 +1,5 @@
 <div class="customer-container">
-
     <div class="page-header">
-
         <div class="header-left">
             <h2>Customer Master</h2>
             <p>Customer & SAP Business One Information</p>
@@ -26,25 +24,26 @@
     <div class="form-card">
         <div class="form-grid">
             <div class="field">
-                <label>Customer Code</label>
+                <label>Customer Code<strong class="text-danger">*</strong></label>
                 <input type="text" placeholder="Customer Code" [(ngModel)]="customer.customerCode" name="customerCode"
                     (blur)="CheckCCode()">
             </div>
             <div class="field">
-                <label>Company Name</label>
+                <label>Company Name<strong class="text-danger">*</strong></label>
                 <input type="text" placeholder="Company Name" [(ngModel)]="customer.companyName" name="companyName">
             </div>
             <div class="field">
-                <label>Contact Person</label>
+                <label>Contact Person<strong class="text-danger">*</strong></label>
                 <input type="text" placeholder="Contact Person" [(ngModel)]="customer.contactPerson"
                     name="contactPerson">
             </div>
             <div class="field">
-                <label>Mobile Number</label>
-                <input type="text" placeholder="Mobile Number" [(ngModel)]="customer.mobileNumber" name="mobileNumber">
+                <label>Mobile Number<strong class="text-danger">*</strong><strong class="text-danger">*</strong></label>
+                <input type="text" placeholder="Mobile Number" [(ngModel)]="customer.mobileNumber"
+                    name="mobileNumber">
             </div>
             <div class="field">
-                <label>Email ID</label>
+                <label>Email ID<strong class="text-danger">*</strong></label>
                 <input type="email" placeholder="Email ID" [(ngModel)]="customer.emailId" name="emailId">
             </div>
             <div class="field">
@@ -67,7 +66,7 @@
                 </select>
             </div>
             <div class="field">
-                <label>GST Number</label>
+                <label>GST Number<strong class="text-danger">*</strong></label>
                 <input type="text" placeholder="GST Number" [(ngModel)]="customer.gstNumber" name="gstNumber">
             </div>
 
@@ -81,13 +80,13 @@
                     name="projectManager">
             </div>
             <div class="field">
-                <label>Support Team</label>
+                <label>Support Team<strong class="text-danger">*</strong></label>
                 <input type="text" placeholder="Support Team" [(ngModel)]="customer.supportTeam" name="supportTeam">
             </div>
             <div class="field">
-                <label>Login Password </label>
-                <input type="text" placeholder="Support Team" [(ngModel)]="customer.cusLoginPassword"
-                    name="supportTeam">
+                <label>Login Password <strong class="text-danger">*</strong></label>
+                <input type="text" placeholder="Login Password" [(ngModel)]="customer.cusLoginPassword"
+                    name="cusLoginPassword">
             </div>
             <div class="field">
                 <label>HANA / SQL Login Credentials</label>
@@ -150,7 +149,6 @@
                                                             [(ngModel)]="filters.contactPerson "
                                                             placeholder="Filter Qty" />
                                                     </th>
-
                                                     <th>
                                                         <input class="form-control form-control-sm"
                                                             [(ngModel)]="filters.mobileNumber "
@@ -163,7 +161,6 @@
                                                     </th>
                                                     <th></th>
                                                 </tr>
-
                                             </thead>
                                             <tbody>
                                                 <tr
@@ -291,7 +288,7 @@
             </div>
             <div class="engineer-grid">
                 <div class="field">
-                    <label>Employee Code</label>
+                    <label>Employee Code<strong class="text-danger">*</strong></label>
                     <select class="form-control" [(ngModel)]="engineer.employeeCode"
                         (change)="SelectEmp(engineer.employeeCode)">
                         <option value="">--Select--</option>
@@ -306,11 +303,11 @@
                 </div>
 
                 <div class="field">
-                    <label>Email ID</label>
+                    <label>Email ID<strong class="text-danger">*</strong></label>
                     <input type="email" placeholder="Email ID" [(ngModel)]="engineer.emailId" name="engineerEmail">
                 </div>
                 <div class="field">
-                    <label>Phone Number</label>
+                    <label>Phone Number<strong class="text-danger">*</strong></label>
                     <input type="text" placeholder="Phone Number" [(ngModel)]="engineer.phoneNumber"
                         name="engineerPhone">
                 </div>
@@ -318,9 +315,7 @@
             <br>
         </div>
         <div class="table-responsive mt-3" *ngIf="engineers.length > 0">
-
             <table class="table table-bordered table-striped">
-
                 <thead>
                     <tr>
                         <th>#</th>
@@ -331,37 +326,26 @@
                         <th width="100">Action</th>
                     </tr>
                 </thead>
-
                 <tbody>
-
                     <tr *ngFor="let item of engineers; let i = index">
-
                         <td>{{ i + 1 }}</td>
                         <td>{{ item.employeeCode }}</td>
                         <td>{{ item.name }}</td>
                         <td>{{ item.emailId }}</td>
                         <td>{{ item.phoneNumber }}</td>
-
                         <td>
                             <button type="button" class="btn btn-danger btn-sm" (click)="deleteEngineer(i)">
                                 Delete
                             </button>
                         </td>
-
                     </tr>
-
                 </tbody>
-
             </table>
-
         </div>
     </div>
     <div class="engineer-card">
-
         <h4>SAP User Information</h4>
-
         <div class="engineer-grid">
-
             <div class="field">
                 <label>Status</label>
                 <select [(ngModel)]="customer.status" name="status">
@@ -370,34 +354,29 @@
                     <option value="ON HOLD">ON HOLD</option>
                 </select>
             </div>
-
             <div class="field">
                 <label>No. of Users</label>
-                <input type="number" [(ngModel)]="customer.sapnoOfUsers" name="noOfUsers">
+                <input type="number" [(ngModel)]="customer.sapnoOfUsers" name="noOfUsers" (blur)="UserTotVerify()">
             </div>
-
             <div class="field">
                 <label>No. of Professional Users</label>
-                <input type="text" [(ngModel)]="customer.sapNoOfProfessionalUsers" name="noOfProfessionalUsers">
+                <input type="text" [(ngModel)]="customer.sapNoOfProfessionalUsers" name="noOfProfessionalUsers"
+                    (blur)="UserTotVerify()">
             </div>
-
             <div class="field">
                 <label>No. of Limited Users</label>
-                <input type="number" [(ngModel)]="customer.sapNoOfLimitedUsers" name="noOfLimitedUsers">
+                <input type="number" [(ngModel)]="customer.sapNoOfLimitedUsers" name="noOfLimitedUsers"
+                    (blur)="UserTotVerify()">
             </div>
-
             <div class="field">
                 <label>SAP Login ID</label>
                 <input type="text" [(ngModel)]="customer.sapLoginId" name="sapLoginId">
             </div>
-
             <div class="field">
                 <label>SAP Login Password</label>
                 <input type="password" [(ngModel)]="customer.sapLoginPassword" name="sapLoginPassword">
             </div>
-
         </div>
-
     </div>
     <div class="action-buttons">
         <button class="btn-save" (click)="Save()">Save Customer</button>

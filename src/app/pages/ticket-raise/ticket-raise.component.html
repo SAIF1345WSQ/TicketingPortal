@@ -13,7 +13,7 @@
             </div>
 
             <div class="header-right">
-                <button type="button" class="btn btn-primary" (click)="GerTicket()" data-bs-toggle="modal"
+                <button type="button" class="btn btn-primary" (click)="GetTicket()" data-bs-toggle="modal"
                     data-bs-target="#CompanyModal">
                     Find
                 </button>
@@ -35,7 +35,6 @@
                         <div class="mb-3">
                             <div class="card">
                                 <div class="ticket-table-container">
-
                                     <div class="table-responsive">
                                         <table class="ticket-table">
                                             <thead>
@@ -106,12 +105,12 @@
                                                     <td>{{ it.contactName }}</td>
                                                     <td>{{ it.customerCode }}</td>
                                                     <td>
-                                                        <span class="status-badge" [ngClass]="{
-                                                                                                                'status-open': it.ticketStatus === 'Open',
-                                                                                                                'status-closed': it.ticketStatus === 'Closed',
-                                                                                                                'status-pending': it.ticketStatus === 'Pending'
-                                                                                                            }">
-                                                            {{ it.ticketStatus }}
+                                                        <span class="badge" [ngClass]="{
+                                                        'bg-danger': it.clientStatus === 'Open' || it.clientStatus === 'Rejected',
+                                                        'bg-success': it.clientStatus === 'Closed',
+                                                        'bg-warning text-dark': it.clientStatus === 'Pending' || it.clientStatus === 'In Progress'
+                                                    }">
+                                                            {{ it.clientStatus }}
                                                         </span>
                                                     </td>
                                                     <td>{{ it.dateTime }}</td>
@@ -163,9 +162,7 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             Close
@@ -176,25 +173,18 @@
         </div>
         <div class="modal fade" id="assignEmployeeModal" tabindex="-1" aria-labelledby="assignEmployeeModalLabel"
             aria-hidden="true">
-
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
-
                     <div class="modal-header">
                         <h5 class="modal-title" id="assignEmployeeModalLabel">
                             Assign Employee
                         </h5>
-
                         <button type="button" class="btn-close" data-bs-dismiss="modal">
                         </button>
                     </div>
-
                     <div class="modal-body">
-
                         <div class="table-responsive">
-
                             <table class="table table-hover table-bordered align-middle">
-
                                 <thead class="table-light">
                                     <tr>
                                         <th>assignedTo </th>
@@ -202,12 +192,13 @@
                                         <th>startDate</th>
                                         <th>completeDate</th>
                                         <th>Status</th>
+                                        <th>Remarks</th>
+                                        <th>Rejected</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <!-- data here -->
                                     <tr *ngFor="let i of AssignedTask">
-
                                         <td>{{ i.assignedTo }}</td>
                                         <td>
                                             {{ i.taskStatus }}
@@ -218,20 +209,22 @@
                                         <td>
                                             {{ i.completeDate }}
                                         </td>
-
                                         <!-- Update Task Status -->
                                         <td>
-                                            <select class="form-select" [(ngModel)]="i.taskStatus">
+                                            <select class="form-select" [(ngModel)]="i.taskStatusByAdmin"
+                                                (change)="ApplyChanges(i)">
                                                 <option value="" selected>Select Status</option>
-                                                <option value="Pending">Pending</option>
-                                                <option value="Working">Working</option>
-                                                <option value="Hold">Hold</option>
                                                 <option value="Done">Done</option>
-                                                <option value="Reject">Reject</option>
-
+                                                <option value="Rejected">Rejected</option>
                                             </select>
                                         </td>
-
+                                        <td>
+                                            <input type="text" class="form-control" [(ngModel)]="i.remarksByAdmin"
+                                                (change)="ApplyChanges(i)" placeholder="Enter remarks">
+                                        </td>
+                                        <td (click)="GetRejectedCount(i.assignedTo, ticket.ticketNo)">
+                                            {{ i.taskcount }}
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -241,8 +234,67 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             Close
                         </button>
-                        <button type="button" class="btn btn-primary">
-                            Assign
+                        <button type="button" class="btn btn-primary" (click)="Apply()" data-bs-dismiss="modal">
+                            Apply
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'" tabindex="-1"
+            (click)="CloseAssignModal()" id="RejectedListModal" tabindex="-1" aria-labelledby="assignEmployeeModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="assignEmployeeModalLabel">
+                            Assign Employee
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Ticket No</th>
+                                        <th>Action By</th>
+                                        <th>Role</th>
+                                        <th>Action Date</th>
+                                        <th>Start Date</th>
+                                        <th>Complete Date</th>
+                                        <th>Status</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let i of RejectTaskList">
+                                        <td>{{ i.id }}</td>
+                                        <td>{{ i.ticketNo }}</td>
+                                        <td>{{ i.actionByName }}</td>
+                                        <td>{{ i.actionByRole }}</td>
+                                        <td>{{ i.actionDate | date:'dd-MM-yyyy' }}</td>
+                                        <td>{{ i.startDate }}</td>
+                                        <td>{{ i.completeDate }}</td>
+                                        <td>{{ i.statusByEmployee }}</td>
+                                        <td>{{ i.remarksByAdmin }}</td>
+                                    </tr>
+                                    <tr *ngIf="AssignedTask.length === 0">
+                                        <td colspan="8" class="text-center">No records found</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="button" class="btn btn-primary" (click)="Apply()" data-bs-dismiss="modal">
+                            Apply
                         </button>
                     </div>
                 </div>
@@ -254,9 +306,7 @@
                 <div class="step-circle">1</div>
                 <div class="step-title">Logged</div>
             </div>
-
             <div class="step-line"></div>
-
             <div class="step" [class.active]="ticket.acknowledgeDateTime">
                 <div class="step-circle">2</div>
                 <div class="step-title">Acknowledged</div>
@@ -278,68 +328,76 @@
 
             <div class="step-line"></div>
 
-            <div class="step" [class.active]="ticket.closureDateTime">
+            <div class="step" [class.active]="ticket.closureDateTimeAdmin">
                 <div class="step-circle">5</div>
                 <div class="step-title">Closed</div>
             </div>
 
         </div>
-        <!-- Issue Details -->
-        <section class="panel panel-internal">
-            <div class="panel-heading">
-                <span class="panel-eyebrow"><strong>Issue Details</strong> </span>
+        <!-- Issue Details (Bootstrap 5, compact) -->
+        <!-- Issue Details (Bootstrap 5, compact) -->
+        <section class="card border-0 shadow-sm issue-card">
+            <div class="card-header bg-white py-2 px-3 border-bottom">
+                <h6 class="mb-0 fw-semibold">Issue details</h6>
             </div>
-            <fieldset [disabled]="isEmployee">
-                <div class="panel-grid four-col">
-                    <div class="field">
-                        <label>Ticket Category</label>
-                        <select class="form-select" [(ngModel)]="ticket.category">
-                            <option>Authorization Issue</option>
-                            <option>Inventory</option>
-                            <option>Finance</option>
-                            <option>Production</option>
-                        </select>
-                    </div>
+            <div class="card-body p-3">
+                <fieldset [disabled]="isEmployee">
+                    <div class="row g-2">
 
-                    <div class="field">
-                        <label>Module</label>
-                        <input type="text" class="form-control" [(ngModel)]="ticket.module"
-                            placeholder="e.g. Billing Engine">
-                    </div>
+                        <div class="col-12 col-sm-6 col-lg-3">
+                            <label class="form-label">Ticket category</label>
+                            <select class="form-select form-select-sm" [(ngModel)]="ticket.category">
+                                <option>Authorization Issue</option>
+                                <option>Inventory</option>
+                                <option>Finance</option>
+                                <option>Production</option>
+                            </select>
+                        </div>
 
-                    <div class="field">
-                        <label>Priority</label>
-                        <select class="form-select priority-select" [(ngModel)]="ticket.priority">
-                            <option>Low</option>
-                            <option selected>Medium</option>
-                            <option>High</option>
-                            <option>Critical</option>
-                        </select>
-                    </div>
+                        <div class="col-12 col-sm-6 col-lg-3">
+                            <label class="form-label">Module</label>
+                            <input type="text" class="form-control form-control-sm" [(ngModel)]="ticket.module"
+                                placeholder="e.g. Billing Engine">
+                        </div>
 
-                    <div class="field">
-                        <label>Subject</label>
-                        <input type="text" class="form-control" [(ngModel)]="ticket.subject"
-                            placeholder="Short summary">
+                        <div class="col-12 col-sm-6 col-lg-3">
+                            <label class="form-label">Priority</label>
+                            <select class="form-select form-select-sm fw-semibold" [ngClass]="{
+                    'text-success': ticket.priority === 'Low',
+                    'text-primary': ticket.priority === 'Medium',
+                    'text-warning': ticket.priority === 'High',
+                    'text-danger':  ticket.priority === 'Critical'
+                  }" [(ngModel)]="ticket.priority">
+                                <option>Low</option>
+                                <option>Medium</option>
+                                <option>High</option>
+                                <option>Critical</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-sm-6 col-lg-3">
+                            <label class="form-label">Subject</label>
+                            <input type="text" class="form-control form-control-sm" [(ngModel)]="ticket.subject"
+                                placeholder="Short summary">
+                        </div>
+                        <!-- Error message, Description, Steps: same line -->
+                        <div class="col-12 col-lg-4">
+                            <label class="form-label">Error message</label>
+                            <input type="text" class="form-control form-control-sm font-monospace"
+                                [(ngModel)]="ticket.errorMessage" placeholder="Paste exact error text, if any">
+                        </div>
+                        <div class="col-12 col-lg-4">
+                            <label class="form-label">Detailed description</label>
+                            <textarea rows="2" class="form-control form-control-sm"
+                                [(ngModel)]="ticket.description"></textarea>
+                        </div>
+                        <div class="col-12 col-lg-4">
+                            <label class="form-label">Steps to reproduce</label>
+                            <textarea rows="2" class="form-control form-control-sm"
+                                [(ngModel)]="ticket.stepsToReproduce"></textarea>
+                        </div>
                     </div>
-
-                    <div class="field span-2">
-                        <label>Error Message</label>
-                        <input type="text" class="form-control mono-input" [(ngModel)]="ticket.errorMessage"
-                            placeholder="Paste exact error text, if any">
-                    </div>
-                </div>
-                <div class="panel-grid two-col mt-3">
-                    <div class="field">
-                        <label>Detailed Description</label>
-                        <textarea rows="3" class="form-control" [(ngModel)]="ticket.description"></textarea>
-                    </div>
-                    <div class="field">
-                        <label>Steps To Reproduce</label>
-                        <textarea rows="3" class="form-control" [(ngModel)]="ticket.stepsToReproduce"></textarea>
-                    </div>
-                </div>
-            </fieldset>
+                </fieldset>
+            </div>
         </section>
         <!-- Contact -->
         <section class="panel">
@@ -391,7 +449,6 @@
                     <div class="field">
                         <label>Assigned To</label>
                         <div class="input-group">
-
                             <select class="form-control" [(ngModel)]="ticket.assignedTo">
                                 <option value="">--Select--</option>
                                 <option *ngFor="let emp of employees" [value]="emp.employeeCode">

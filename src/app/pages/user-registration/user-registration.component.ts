@@ -129,8 +129,6 @@ export class UserRegistrationComponent {
         });
       }
     }
-
-
   }
   filterItems(items: any[]) {
     return items.filter(item =>
@@ -154,8 +152,32 @@ export class UserRegistrationComponent {
   }
   CheckDigit(num: any) {
     if (num.length < 10 && num.length < 10) {
-      alert("Phone numbner Require 10 digit");
+      alert("Phone number requires 10 digits");
       return;
+    }
+  }
+  DeleteEmpl(emp: any) {
+    if (emp.id != null || emp.id != '') {
+      this.AdminService.DeleteEmployee(emp.id).subscribe({
+        next: (res) => {
+          if (res.success) {
+            alert(res.message);
+            this.GetEmploye();
+          }
+          else {
+            alert(res.message);
+          }
+        }, error: (err) => {
+          console.log(err);
+          const message =
+            err.error?.message ||
+            err.error ||
+            err.message ||
+            'Something went wrong';
+          this.ErrorMessage = message;
+          alert(message);
+        }
+      });
     }
   }
 }

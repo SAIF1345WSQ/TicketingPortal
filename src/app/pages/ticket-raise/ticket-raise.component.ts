@@ -50,9 +50,7 @@ export class TicketRaiseComponent implements OnInit {
     // Internal Tracking
     acknowledgeBy: '',
     acknowledgeDateTime: '',
-
     assignedTo: '',
-
     assignedDate: '',
 
     closureDateTimeToClient: '',
@@ -67,14 +65,19 @@ export class TicketRaiseComponent implements OnInit {
     taskStatus: '',
     startDate: '',
     completeDate: '',
-    timeTaken: ''
+    timeTaken: '',
+    taskStatusByAdmin: '',
+    remarksByAdmin: ''
   };
   filters: any = {};
+  RejectTaskList: any = {};
   modalCompany: any[] = [];
   employees: any[] = [];
   AssignedTask: any[] = [];
   p: number = 1;
   itemsPerPage: number = 10;
+  RejectCount: number = 0;
+  showModal = false;
   ngOnInit() {
     this.sessionId = sessionStorage.getItem('username');
     if (this.sessionId != null) {
@@ -130,9 +133,13 @@ export class TicketRaiseComponent implements OnInit {
       taskStatus: '',
       startDate: '',
       completeDate: '',
-      timeTaken: ''
+      timeTaken: '',
+      taskStatusByAdmin: '',
+      remarksByAdmin: ''
     };
   }
+
+  ChangLog = {};
   submitTicket() {
     console.log('Ticket Data', this.ticket);
     if (this.ticket.id == '' || this.ticket.id == undefined || this.ticket.id == null) {
@@ -182,7 +189,7 @@ export class TicketRaiseComponent implements OnInit {
     // API Call Here
     // this.ticketService.saveTicket(this.ticket).subscribe(...);
   }
-  GerTicket() {
+  GetTicket() {
     this.services.GetTicByServices(this.sessionId).subscribe({
       next: (res) => {
         if (res) {
@@ -196,7 +203,6 @@ export class TicketRaiseComponent implements OnInit {
   }
 
   calculateTimeTaken() {
-
     if (
       this.ticket.dateTime &&
       this.ticket.actualCompletionDateTime
@@ -242,19 +248,31 @@ export class TicketRaiseComponent implements OnInit {
   DeleteSaveCompany(data: any) {
   }
   GetTaskstatus(empid: string, TNo: string) {
+    // 1. Build the table rows first (copy so original data isn't changed)
+    this.AssignedTask = this.modalCompany
+      .filter(x => x.ticketNo == TNo && x.assignedTo == empid)
+      .map(x => ({
+        ...x,
+        startDate: x.startDate ? this.dateformat(x.startDate) : x.startDate,
+        completeDate: x.completeDate ? this.dateformat(x.completeDate) : x.completeDate,
+        taskcount: 0                       // placeholder until API returns
+      }));
+    this.RejectCount = 0;
+    this.services.GetRejTaskByAdminService().subscribe({
+      next: (res) => {
+        if (res.status) {
+          const count = res.data.filter((x: any) => x.ticketNo === TNo).length;
 
-    const a = this.modalCompany.filter(x => x.ticketNo == TNo && x.assignedTo == empid).map(x => ({ ...x }));//Map is for no Original data change 
-    a.forEach((item: any) => {
-
-      if (item.startDate) {
-        item.startDate = this.dateformat(item.startDate)
-      }
-      if (item.completeDate) {
-        item.completeDate = this.dateformat(item.completeDate);
-      }
+          this.RejectCount = count;
+          this.AssignedTask = this.AssignedTask.map(row => ({
+            ...row,
+            taskcount: count
+          }));
+          console.log('Rejected count for TNo', TNo, ':', count);
+        }
+      },
+      error: (err) => console.error(err)
     });
-    this.AssignedTask = a;
-
   }
   dateformat(dateformat: any) {
     const date = new Date(dateformat);
@@ -263,5 +281,54 @@ export class TicketRaiseComponent implements OnInit {
       String(date.getMonth() + 1).padStart(2, '0') + '-' +
       date.getFullYear();
     return a;
+  }
+  ApplyChanges(item: any) {
+    if (item.taskStatusByAdmin != null && item.taskStatusByAdmin != '') {
+      if (item.id) {
+        this.ChangLog = {
+          TicketNo: this.ticket.ticketNo,
+          assignedTo: item.assignedTo,
+          taskStatus: item.taskStatus,
+          startDate: item.startDate,
+          completeDate: item.completeDate,
+          taskStatusByAdmin: item.taskStatusByAdmin,
+          RemarksByAdmin: item.remarksByAdmin,
+          SessionId: this.sessionId,
+        };
+      }
+    }
+  }
+  Apply() {
+    this.services.LogStatusByAdmin(this.ChangLog).subscribe({
+      next: (res) => {
+        if (res.success) {
+        }
+      },
+      error: (err) => {
+        console.log(err);
+        const message =
+          err.error?.message ||
+          err.error ||
+          err.message ||
+          'Something went wrong';
+        alert(err.message)
+      }
+    })
+  }
+  GetRejectedCount(empid: string, TNo: string) {
+    if (empid && TNo) {
+      this.services.GetRejTCountList(empid, TNo).subscribe({
+        next: (res) => {
+          if (res.status) {
+            this.RejectTaskList = res.data;
+            this.showModal = true;
+          }
+        },
+        error: (err) => console.error(err)
+      });
+    }
+  }
+  CloseAssignModal() {
+    this.showModal = false;
   }
 }
